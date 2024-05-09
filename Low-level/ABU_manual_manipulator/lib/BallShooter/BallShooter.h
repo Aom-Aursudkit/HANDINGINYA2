@@ -3,6 +3,9 @@
 
 #include <Servo.h>
 
+#include <AccelStepper.h>
+#include <MultiStepper.h>
+
 class BallShooter {
 public:
     BallShooter(int servoPin, int limitSwitchPin, int INA, int INB, int grb_ref1, int grb_ref2, int stepPin, int dirPin);
@@ -36,6 +39,8 @@ private:
     int dirPin_;
 
     static const int stepsPerRevolution = 200;
+
+    AccelStepper shooterstepper;
 };
 
 #endif // BALL_SHOOTER_H

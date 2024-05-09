@@ -44,6 +44,11 @@ public:
   void lifter_down(int pwm, int mms); // pull the gripper down with time
 
   void single_press(bool next);
+
+  void mode6();
+  void mode3();
+
+  int gettimes(){return count;}
 private:
   int gap = 80;  //distance between seed in mm
 
@@ -57,27 +62,30 @@ private:
   int setzeropin_; // limit pin to set zero for step motor
 
   int storage = 0;
-  int manual_lock_dis = 455; // the initial pos in mm
-  int max_dis = 455; // the max pos in mm
+  int manual_lock_dis = 435; // the initial pos in mm
+  int max_dis = 435; // the max pos in mm
 
   int n_release = 0;
 
   bool Ldir = true; // go out from set zero pos
   bool Rdir = false; // go in to set zero pos
 
-  int grbAng = 0;
+  int grbAng = 90;
   int relAng = 180;
 
-  int pwm = 170;
+  int pwm = 255;
 
   bool harvest = true;
   bool ready_to_stack = true;
   bool pulling = false;
+  bool mode3_status = false;
 
   int stage = 0;
   int pop_stage = 0;
 
   int pd = 500;
+
+  int count = 0;
 
   AccelStepper stepper;
 };

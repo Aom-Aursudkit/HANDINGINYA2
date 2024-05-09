@@ -3,7 +3,8 @@
 
 BallShooter::BallShooter(int servoPin, int limitSwitchPin, int INA, int INB, int grb_ref1, int grb_ref2, int stepPin,
                          int dirPin)
-  : servoPin_(servoPin)
+  : shooterstepper(AccelStepper::DRIVER, stepPin, dirPin)
+  , servoPin_(servoPin)
   , limitSwitchPin_(limitSwitchPin)
   , INA_(INA)
   , INB_(INB)
@@ -45,8 +46,11 @@ void BallShooter::setup()
   pinMode(grb_ref2, OUTPUT);
   pinMode(stepPin_, OUTPUT);
   pinMode(dirPin_, OUTPUT);
+  shooterstepper.setSpeed(20000);
+  shooterstepper.setMaxSpeed(50000); // Set your desired maximum speed in steps per second
+  shooterstepper.setAcceleration(10000); // Set your desired acceleration in steps per second per second
   Serial.begin(115200);
-  s.write(180);
+  s.write(105);
   delay(200);
   // keep motor from the ground
   motor_stop();
@@ -56,18 +60,16 @@ void BallShooter::setup()
   while (digitalRead(limitSwitchPin_) == 1)
   {
     digitalWrite(stepPin_, HIGH);
-    delayMicroseconds(1000);
+    delayMicroseconds(500);
     digitalWrite(stepPin_, LOW);
-    delayMicroseconds(1000);
+    delayMicroseconds(500);
   }
-  digitalWrite(dirPin_, HIGH);
-  for (int i = 0; i < 880; ++i)
-  {
-    digitalWrite(stepPin_, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(stepPin_, LOW);
-    delayMicroseconds(1000);
-  }
+  delay(500);
+  shooterstepper.runSpeed();
+  shooterstepper.moveTo(880);
+  shooterstepper.runToPosition();
+  shooterstepper.setCurrentPosition(0);
+  delay(500); // Optional delay after movement
 }
 // servo debug
 void BallShooter::servo()
@@ -143,7 +145,7 @@ void BallShooter::wheel_stop()
 // additional function for control
 void BallShooter::preparing()
 {  // keep the grabber on the ground to grab a ball
-  s.write(140);
+  s.write(50);
   motor(-230);  // down
   delay(1600);
 
@@ -155,7 +157,7 @@ void BallShooter::preparing()
 void BallShooter::grab()
 {  // grab the ball and keep high from the ground
   // grab by servo
-  s.write(180);
+  s.write(105);
   delay(500);
   //  s.write(120);
   // adjust motor position
@@ -169,31 +171,28 @@ void BallShooter::grab()
 
 void BallShooter::shoot()
 {
-  s.write(140);
+  s.write(50);
   //  delay(500);
   // On fly wheel at full speed
   // int power = 0;
   wheel(255);
+  delay(500);
   // deliver a ball to fly wheel
-  digitalWrite(dirPin_, LOW);
-  while (digitalRead(limitSwitchPin_) == 1)
-  {
-    digitalWrite(stepPin_, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(stepPin_, LOW);
-    delayMicroseconds(1000);
-  }
+  // digitalWrite(dirPin_, LOW);
+  shooterstepper.runSpeed();
+  shooterstepper.moveTo(-880);
+  shooterstepper.runToPosition();
+  shooterstepper.setCurrentPosition(0);
   // stop
   wheel_stop();
-  s.write(180);
+  motor(-230);  // down
+  delay(1600);
+  s.write(50);
   // set holder back to same old pos
   digitalWrite(dirPin_, HIGH);
 
-  for (int i = 0; i < 880; ++i)
-  {
-    digitalWrite(stepPin_, HIGH);
-    delayMicroseconds(1000);
-    digitalWrite(stepPin_, LOW);
-    delayMicroseconds(1000);
-  }
+  shooterstepper.runSpeed();
+  shooterstepper.moveTo(880);
+  shooterstepper.runToPosition();
+  shooterstepper.setCurrentPosition(0);
 }

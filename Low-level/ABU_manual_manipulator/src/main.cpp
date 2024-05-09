@@ -119,7 +119,7 @@ void subscription_callback(const void* msgin)
     // trig left
     ballShooter.shoot();
     delay(100);
-    ballShooter.preparing();
+    // ballShooter.preparing();
     ballShooterState = 3;
   }
   else if (command == 18.0 && maniState == true)
