@@ -151,9 +151,6 @@ void SeedHarvester::stack()
     }
     if (storage == 0)
     {
-      stepper.setSpeed(10000);
-      stepper.setMaxSpeed(25000);    // Set your desired maximum speed in steps per second
-      stepper.setAcceleration(7000); // Set your desired acceleration in steps per second per second
       linearDrive(manual_lock_dis - 15, Rdir);
       manual_lock_dis = manual_lock_dis - 15;
       storage = storage + 1;
@@ -163,16 +160,10 @@ void SeedHarvester::stack()
     }
     else if (storage > 0 && storage < 5)
     {
-      stepper.setSpeed(20000);
-      stepper.setMaxSpeed(50000);     // Set your desired maximum speed in steps per second
-      stepper.setAcceleration(10000); // Set your desired acceleration in steps per second per second
       linearDrive(manual_lock_dis - gap, Rdir);
     }
     else if (storage == 5)
     {
-      stepper.setSpeed(20000);
-      stepper.setMaxSpeed(50000);     // Set your desired maximum speed in steps per second
-      stepper.setAcceleration(10000); // Set your desired acceleration in steps per second per second
       linearDrive(manual_lock_dis - gap, Rdir);
       pop_stage = 0;
       // stage = 0;
@@ -349,34 +340,28 @@ void SeedHarvester::single_press(bool next)
   }
 }
 
-void SeedHarvester::mode3()
-{
-  lifter_up(this->pwm);
-  setZero();
-  linearDrive(max_dis, Ldir);
-  manual_lock_dis = max_dis - (2 * 80);
-  storage = 3;
-}
+// void SeedHarvester::mode3()
+// {
+//   lifter_up(this->pwm);
+//   setZero();
+//   linearDrive(max_dis, Ldir);
+//   manual_lock_dis = max_dis - (2 * 80);
+//   storage = 3;
+// }
 
-void SeedHarvester::mode6()
-{
-  lifter_up(this->pwm);
-  setZero();
-  // linearDrive(max_dis, Ldir);
-  manual_lock_dis = max_dis;
-  storage = 0;
-}
+// void SeedHarvester::mode6()
+// {
+//   lifter_up(this->pwm);
+//   setZero();
+//   // linearDrive(max_dis, Ldir);
+//   manual_lock_dis = max_dis;
+//   storage = 0;
+// }
 
 void SeedHarvester::Stacking(bool next)
 { // to stack seed in harvest stage
   if (harvest)
   { // check if in harvest stage
-    if (count == 1 && !mode3_status)
-    {
-      mode3();
-      mode3_status = true;
-      stage = 0;
-    }
     if (next)
     { // if forward stage
       stage++;
@@ -391,6 +376,10 @@ void SeedHarvester::Stacking(bool next)
       else
       {
         preparing(); // prepare to grab
+        if(count >= 1 && !mode3_status){
+          manual_lock_dis = max_dis;
+          storage = 3;
+        }
       }
     }
     else
