@@ -158,7 +158,7 @@ void BallShooter::grab()
 {  // grab the ball and keep high from the ground
   // grab by servo
   s.write(180);
-  delay(1200);
+  // delay(200);
   //  s.write(120);
   // adjust motor position
   motor(230);  // up
