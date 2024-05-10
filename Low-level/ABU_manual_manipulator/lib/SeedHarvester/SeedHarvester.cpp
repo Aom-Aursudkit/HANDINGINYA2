@@ -351,16 +351,18 @@ void SeedHarvester::single_press(bool next)
 
 void SeedHarvester::mode3()
 {
+  lifter_up(this->pwm);
   setZero();
   linearDrive(max_dis, Ldir);
-  manual_lock_dis = max_dis - (3 * 80);
+  manual_lock_dis = max_dis - (2 * 80);
   storage = 3;
 }
 
 void SeedHarvester::mode6()
 {
+  lifter_up(this->pwm);
   setZero();
-  linearDrive(max_dis, Ldir);
+  // linearDrive(max_dis, Ldir);
   manual_lock_dis = max_dis;
   storage = 0;
 }
@@ -369,16 +371,12 @@ void SeedHarvester::Stacking(bool next)
 { // to stack seed in harvest stage
   if (harvest)
   { // check if in harvest stage
-    // if (count == 1 && !mode3_status)
-    // {
-    //   mode3();
-    //   mode3_status = true;
-    // }
-    // else
-    // {
-    //   mode6();
-    //   mode3_status = false;
-    // }
+    if (count == 1 && !mode3_status)
+    {
+      mode3();
+      mode3_status = true;
+      stage = 0;
+    }
     if (next)
     { // if forward stage
       stage++;

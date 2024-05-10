@@ -50,7 +50,7 @@ void BallShooter::setup()
   shooterstepper.setMaxSpeed(50000); // Set your desired maximum speed in steps per second
   shooterstepper.setAcceleration(10000); // Set your desired acceleration in steps per second per second
   Serial.begin(115200);
-  s.write(105);
+  s.write(150);
   delay(200);
   // keep motor from the ground
   motor_stop();
@@ -145,7 +145,7 @@ void BallShooter::wheel_stop()
 // additional function for control
 void BallShooter::preparing()
 {  // keep the grabber on the ground to grab a ball
-  s.write(50);
+  s.write(60);
   motor(-230);  // down
   delay(1600);
 
@@ -157,7 +157,7 @@ void BallShooter::preparing()
 void BallShooter::grab()
 {  // grab the ball and keep high from the ground
   // grab by servo
-  s.write(105);
+  s.write(150);
   delay(500);
   //  s.write(120);
   // adjust motor position
@@ -171,7 +171,7 @@ void BallShooter::grab()
 
 void BallShooter::shoot()
 {
-  s.write(50);
+  s.write(60);
   //  delay(500);
   // On fly wheel at full speed
   // int power = 0;
@@ -187,7 +187,7 @@ void BallShooter::shoot()
   wheel_stop();
   motor(-230);  // down
   delay(1600);
-  s.write(50);
+  s.write(60);
   // set holder back to same old pos
   digitalWrite(dirPin_, HIGH);
 
