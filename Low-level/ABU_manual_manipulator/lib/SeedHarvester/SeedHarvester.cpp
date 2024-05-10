@@ -242,7 +242,8 @@ void SeedHarvester::drop()
     }
     if (storage == 1)
     {
-      linearDriveSteady(manual_lock_dis, Ldir);
+      // linearDriveSteady(manual_lock_dis, Ldir);
+      linearDrive(manual_lock_dis, Ldir);
       return;
     }
     linearDrive(manual_lock_dis, Ldir);
@@ -269,7 +270,7 @@ void SeedHarvester::drop_down()
     }
     if (storage == 0)
     { // moving to next seed to deploy (last one)
-      setZero();
+      linearDrive(max_dis, Rdir);
       stage = 0;
       manual_lock_dis = max_dis;
       harvest = true;
@@ -340,23 +341,6 @@ void SeedHarvester::single_press(bool next)
   }
 }
 
-// void SeedHarvester::mode3()
-// {
-//   lifter_up(this->pwm);
-//   setZero();
-//   linearDrive(max_dis, Ldir);
-//   manual_lock_dis = max_dis - (2 * 80);
-//   storage = 3;
-// }
-
-// void SeedHarvester::mode6()
-// {
-//   lifter_up(this->pwm);
-//   setZero();
-//   // linearDrive(max_dis, Ldir);
-//   manual_lock_dis = max_dis;
-//   storage = 0;
-// }
 
 void SeedHarvester::Stacking(bool next)
 { // to stack seed in harvest stage
@@ -376,7 +360,7 @@ void SeedHarvester::Stacking(bool next)
       else
       {
         preparing(); // prepare to grab
-        if(count >= 1 && !mode3_status){
+        if(count >= 1 && !mode3_status){ // check the condition to perform 3 storage
           manual_lock_dis = max_dis;
           storage = 3;
         }
