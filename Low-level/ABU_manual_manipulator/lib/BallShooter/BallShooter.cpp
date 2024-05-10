@@ -162,7 +162,7 @@ void BallShooter::grab()
   //  s.write(120);
   // adjust motor position
   motor(230);  // up
-  delay(1700);
+  delay(1850);
   // release the ball on holder
   // s.write(160);
   motor_stop();
@@ -187,10 +187,9 @@ void BallShooter::shoot()
   wheel_stop();
   motor(-230);  // down
   delay(1600);
+  motor_stop();
   s.write(100);
   // set holder back to same old pos
-  digitalWrite(dirPin_, HIGH);
-
   shooterstepper.runSpeed();
   shooterstepper.moveTo(850);
   shooterstepper.runToPosition();
