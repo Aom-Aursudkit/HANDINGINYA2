@@ -50,7 +50,7 @@ public:
 
   int gettimes(){return count;}
 private:
-  int gap = 80;  //distance between seed in mm
+  int gap = 74;  //distance between seed in mm
 
   int gpin_;      // grabber pin (servo)
   int lftA_;     // lifter pin (ref A)
@@ -62,8 +62,8 @@ private:
   int setzeropin_; // limit pin to set zero for step motor
 
   int storage = 0;
-  int manual_lock_dis = 435; // the initial pos in mm
-  int max_dis = 435; // the max pos in mm
+  int manual_lock_dis = 445; // the initial pos in mm
+  int max_dis = 445; // the max pos in mm
 
   int n_release = 0;
 
